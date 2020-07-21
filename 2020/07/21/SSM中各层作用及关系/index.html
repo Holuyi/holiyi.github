@@ -16,7 +16,7 @@
 <meta property="og:description" content="持久层：DAO层（mapper层）（属于mybatis模块） DAO层：主要负责与数据库进行交互设计，用来处理数据的持久化工作。 DAO层的设计首先是设计DAO的接口，也就是项目中看到的Dao包。 然后在Spring的xml配置文件中定义此接口的实现类，就可在其他模块中调用此接口来进行数据业务的处理，而不用关心接口的具体实现类是哪个类，这里往往用到的就是反射机制，DAO层的jdbc.propert">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-07-21T07:56:13.553Z">
-<meta property="article:modified_time" content="2020-07-21T07:39:30.042Z">
+<meta property="article:modified_time" content="2020-07-21T16:15:47.702Z">
 <meta property="article:author" content="Holuyi">
 <meta name="twitter:card" content="summary">
   
@@ -173,11 +173,18 @@
 <li>有的项目Dao层，写成mapper，当成一个意思理解。</li>
 </ul>
 <h2 id="业务层：Service层（属于spring模块）"><a href="#业务层：Service层（属于spring模块）" class="headerlink" title="业务层：Service层（属于spring模块）"></a>业务层：Service层（属于spring模块）</h2><ul>
-<li>Service层：主要负责业务模块的逻辑应用设计。也就是项目中看到的Service包。</li>
-<li>Service层的设计首先是设计接口，再设计其实现的类。也就是项目中看到的service+impl包。</li>
-<li>接着再在Spring的xml配置文件中配置其实现的关联。这样我们就可以在应用中调用Service接口来进行业务处理。</li>
-<li>最后通过调用DAO层已定义的接口，去实现Service具体的实现类。</li>
-<li>Service层的业务实现，具体要调用到已定义的DAO层的接口。</li>
+<li><p>Service层：主要负责业务模块的逻辑应用设计。也就是项目中看到的Service包。</p>
+</li>
+<li><p>Service层的设计首先是设计接口，再设计其实现的类。也就是项目中看到的service+impl包。</p>
+</li>
+<li><p>接着再在Spring的xml配置文件中配置其实现的关联。这样我们就可以在应用中调用Service接口来进行业务处理。</p>
+</li>
+<li><p>最后通过调用DAO层已定义的接口，去实现Service具体的实现类。</p>
+</li>
+<li><p>Service层的业务实现，具体要调用到已定义的DAO层的接口。</p>
+<a id="more"></a>
+
+</li>
 </ul>
 <h2 id="控制层-表现层：Controller层（Handler层）-（属于springMVC模块）"><a href="#控制层-表现层：Controller层（Handler层）-（属于springMVC模块）" class="headerlink" title="控制层/表现层：Controller层（Handler层） （属于springMVC模块）"></a>控制层/表现层：Controller层（Handler层） （属于springMVC模块）</h2><ul>
 <li>Controller层：主要负责具体的业务模块流程控制，也就是看到的controller包。</li>
@@ -341,6 +348,26 @@
 </aside>
 
 
+
+  
+  <div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="SSM中各层作用及关系" data-title="SSM中各层作用及关系" data-url="http://yoursite.com/child/2020/07/21/SSM%E4%B8%AD%E5%90%84%E5%B1%82%E4%BD%9C%E7%94%A8%E5%8F%8A%E5%85%B3%E7%B3%BB/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
 
   
   
