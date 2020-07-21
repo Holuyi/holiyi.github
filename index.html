@@ -144,6 +144,222 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Redis基础学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/07/21/Redis%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/">Redis基础学习</a>
+    </h1>
+  
+
+        
+        <a href="/2020/07/21/Redis%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
+  	<time datetime="2020-07-21T12:28:55.927Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Redis基础学习"><a href="#Redis基础学习" class="headerlink" title="Redis基础学习"></a>Redis基础学习</h3><h4 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h4><ol>
+<li>概念: Redis是一款高性能的NoSQL系列的非关系型数据库</li>
+</ol>
+<ol start="2">
+<li><p>命令操作:</p>
+<ol>
+<li><p>Redis的数据结构:</p>
+<ul>
+<li>Redis存储的是: key-value格式的数据，其中key都是字符串，value有5种不同的数据结构</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+<pre><code>- value的数据结构:
+
+  1. 字符串类型: String
+
+
+
+  2. 哈希类型: hash(Map类型)
+
+
+
+  3. 列表类型: list(Linkedlist)
+
+
+
+  4. 集合类型: set
+
+
+
+  5. 有序列表类型: sortedset</code></pre><ol start="2">
+<li><p>字符串类型 string</p>
+<ol>
+<li>存储: set key value</li>
+</ol>
+</li>
+</ol>
+<pre><code>2. 获取: get key
+
+
+
+3. 删除: del key</code></pre><ol start="3">
+<li><p>哈希类型 hash</p>
+<ol>
+<li>存储: hset key field value</li>
+</ol>
+</li>
+</ol>
+<pre><code>2. 获取: hget key field
+
+
+
+3. 删除: hdel key field
+
+
+
+4. 获取hash中的所有键和值: hgetall key</code></pre><ol start="4">
+<li><p>列表类型 list</p>
+<ol>
+<li><p>存储:</p>
+<ul>
+<li>lpush key value: 从左添加</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+<pre><code>   - rpush key value: 从右添加
+
+2. 获取:
+
+   - lrange key start end: 范围获取(0 -1代表获取全部)
+
+3. 删除:
+
+   - lpop key: 删除列表最左边的元素，并返回
+
+
+
+   - rpop key: 删除列表最右边的元素，并返回</code></pre><ol start="5">
+<li><p>集合类型 set: 不允许重复元素(且无序)</p>
+<ol>
+<li>存储: sadd key value value1 value2 ….</li>
+</ol>
+</li>
+</ol>
+<pre><code>2. 获取: smembers key: 获取set集合中的所有元素
+
+
+
+3. 删除: srem key value: 删除set集合中的某个元素</code></pre><ol start="6">
+<li><p>有序集合类型 sortedset: 不允许有重复元素，不同的是每个元素会有一个double类型的分数(权重)，按照此分数进行排序</p>
+<ol>
+<li>存储: zadd key score value</li>
+</ol>
+</li>
+</ol>
+<pre><code>2. 获取: zrange key start end
+
+
+
+3. 删除: zrem key value</code></pre><ol start="7">
+<li><p>通用命令</p>
+<ol>
+<li>keys * : 查询所有的键</li>
+</ol>
+</li>
+</ol>
+<pre><code>2. type key : 获取键对应的value的类型
+
+
+
+3. del key: 删除指定的key value</code></pre><ol start="3">
+<li><p>持久化</p>
+<ol>
+<li>Redis是一个内存数据库，当Redis服务器或电脑重启，数据会丢失，我们可以将Redis内存中的数据持久化保存到硬盘文件中</li>
+</ol>
+</li>
+</ol>
+<ol start="2">
+<li><p>Redis持久化机制</p>
+<ol>
+<li><p>RDB: 默认方式，不需要进行配置，默认使用</p>
+<ul>
+<li>在一定间隔事件中，检测key的变化情况，然后持久化数据</li>
+</ul>
+<ol>
+<li><p>编辑redis.windows.conf文件</p>
+<ul>
+<li><p>save 900 1(15分钟有一个key变化就持久化)</p>
+</li>
+<li><p>save 300 10</p>
+</li>
+<li><p>save 60 10000</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<pre><code>   2. 重新启动redis服务器并指定conf
+
+      - cmd启动服务器: redis-server.exe redis.windows.conf
+
+2. AOF: 日志记录的方法，可以记录每一条命令的操作，然后持久化操作(不推荐)
+
+   - 编辑redis.windows.conf
+     - appendonly no(关闭aof) --&gt; appendonly yes
+     - appendfsync always: 每一次操作都进行持久化
+     - appendfsync everysec: 每隔一秒都进行一次持久化
+     - appendfsync no : 不进行持久化</code></pre>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/07/21/Redis%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-什么是微服务，SpringBoot和SpringCloud的关系" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
