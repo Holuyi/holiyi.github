@@ -6,13 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com/child">
-  <title>Holuyi&#39;s Blog</title>
+  <title>SSM中各层作用及关系 | Holuyi&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Holuyi&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/child/index.html">
+  <meta name="description" content="持久层：DAO层（mapper层）（属于mybatis模块） DAO层：主要负责与数据库进行交互设计，用来处理数据的持久化工作。 DAO层的设计首先是设计DAO的接口，也就是项目中看到的Dao包。 然后在Spring的xml配置文件中定义此接口的实现类，就可在其他模块中调用此接口来进行数据业务的处理，而不用关心接口的具体实现类是哪个类，这里往往用到的就是反射机制，DAO层的jdbc.propert">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSM中各层作用及关系">
+<meta property="og:url" content="http://yoursite.com/child/2020/07/21/SSM%E4%B8%AD%E5%90%84%E5%B1%82%E4%BD%9C%E7%94%A8%E5%8F%8A%E5%85%B3%E7%B3%BB/index.html">
 <meta property="og:site_name" content="Holuyi&#39;s Blog">
+<meta property="og:description" content="持久层：DAO层（mapper层）（属于mybatis模块） DAO层：主要负责与数据库进行交互设计，用来处理数据的持久化工作。 DAO层的设计首先是设计DAO的接口，也就是项目中看到的Dao包。 然后在Spring的xml配置文件中定义此接口的实现类，就可在其他模块中调用此接口来进行数据业务的处理，而不用关心接口的具体实现类是哪个类，这里往往用到的就是反射机制，DAO层的jdbc.propert">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-21T07:56:13.553Z">
+<meta property="article:modified_time" content="2020-07-21T07:39:30.042Z">
 <meta property="article:author" content="Holuyi">
 <meta name="twitter:card" content="summary">
   
@@ -148,97 +152,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-什么是微服务，SpringBoot和SpringCloud的关系" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-SSM中各层作用及关系" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/07/21/%E4%BB%80%E4%B9%88%E6%98%AF%E5%BE%AE%E6%9C%8D%E5%8A%A1%EF%BC%8CSpringBoot%E5%92%8CSpringCloud%E7%9A%84%E5%85%B3%E7%B3%BB/">什么是微服务，SpringBoot和SpringCloud的关系</a>
-    </h1>
-  
-
-        
-        <a href="/2020/07/21/%E4%BB%80%E4%B9%88%E6%98%AF%E5%BE%AE%E6%9C%8D%E5%8A%A1%EF%BC%8CSpringBoot%E5%92%8CSpringCloud%E7%9A%84%E5%85%B3%E7%B3%BB/" class="archive-article-date">
-  	<time datetime="2020-07-21T07:56:13.569Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="什么是微服务"><a href="#什么是微服务" class="headerlink" title="什么是微服务"></a>什么是微服务</h2><p>就目前而言对于微服务业界没有一个统一的,标准的定义.但通常而言,微服务是一种架构模式或者说是一种架构风格,它提倡单一应用程序划分为一组小的服务,每个服务在其独立的自己的进程中,服务之间相互协调,互相配合,为用户提供最终价值.服务之间采用轻量级的通信机制互相沟通(基于Http的Restful API)每个服务都围绕着具体的业务进行构建,并且能够被独立的部署到生产环境,类生产环境进行构建,可以有一个非常轻量级的集中式管理来协调这些服务,可以使用不同的语言来编写服务,也可以使用不同的数据存储.</p>
-<h2 id="微服务与微服务架构"><a href="#微服务与微服务架构" class="headerlink" title="微服务与微服务架构?"></a>微服务与微服务架构?</h2><ul>
-<li>微服务强调的是服务的大小,关注的是点,是具体解决某一个问题/提供落地对象服务的一个服务应用,</li>
-<li>狭义的看,可以看做Eclipse中的一个个微服务工程.</li>
-<li>微服务架构为一种架构模式.他提倡将单一应用程序分成一组小的服务,服务之间互相协调,互相配合,为用户提供最终价值.</li>
-<li>每个服务运行在其独立的进程中,服务于服务间采用轻量级的通信机制互相协作(通常是Http 的Restful API) 每一个服务</li>
-<li>都围绕着具体业务进行构建,并且能够被独立的部署到生产环境,类生产环境中.另外,应当尽量避免统一的,集中式的服务管理机制,</li>
-<li>对具体的一个服务而言,应根据业务上下文,选择合适的语言,工具对其进行构建.</li>
-</ul>
-<h2 id="SpringCloud-是什么"><a href="#SpringCloud-是什么" class="headerlink" title="SpringCloud 是什么?"></a>SpringCloud 是什么?</h2><ul>
-<li>基于SpringBoot提供了一套为微服务(microservices)解决方案,包括服务注册与发现,</li>
-<li>配置中心,全链路监控,服务网关,负载均衡,熔断器等组件,除了基于NetFlix的开营组件做 高度抽象之外,还有一些选型中立了的开源组件.</li>
-<li>分布式微服务架构下的一站式解决方案,是各个微服务架构落地技术的结合体,俗称为微服务全家桶.</li>
-</ul>
-<h2 id="SpringBoot和SpringCloud的关系和区别"><a href="#SpringBoot和SpringCloud的关系和区别" class="headerlink" title="SpringBoot和SpringCloud的关系和区别"></a>SpringBoot和SpringCloud的关系和区别</h2><ol>
-<li>SpringBoot专注于方便的开发单个个体微服务</li>
-<li>SpringCloud是关注于全局的微服务协调治理框架,它将SpringBoot开发的一个个单体微服务整合并管理起来.为各个微服务之间提供配置管理,服务发现,断路器,路由,微代理,事件总线,决策竞选,分布式会话等集成服务.</li>
-<li>SpringBoot可以离开SpringCloud单独使用,而SpringCloud离不开SpringBoot</li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/07/21/%E4%BB%80%E4%B9%88%E6%98%AF%E5%BE%AE%E6%9C%8D%E5%8A%A1%EF%BC%8CSpringBoot%E5%92%8CSpringCloud%E7%9A%84%E5%85%B3%E7%B3%BB/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-SSM中各层作用及关系" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/07/21/SSM%E4%B8%AD%E5%90%84%E5%B1%82%E4%BD%9C%E7%94%A8%E5%8F%8A%E5%85%B3%E7%B3%BB/">SSM中各层作用及关系</a>
+    <h1 class="article-title" itemprop="name">
+      SSM中各层作用及关系
     </h1>
   
 
@@ -302,6 +223,27 @@
       
 
       
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
     </div>
     <div class="article-info article-info-index">
       
@@ -309,16 +251,84 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/07/21/SSM%E4%B8%AD%E5%90%84%E5%B1%82%E4%BD%9C%E7%94%A8%E5%8F%8A%E5%85%B3%E7%B3%BB/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/child/2020/07/21/SSM%E4%B8%AD%E5%90%84%E5%B1%82%E4%BD%9C%E7%94%A8%E5%8F%8A%E5%85%B3%E7%B3%BB/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2020/07/21/%E4%BB%80%E4%B9%88%E6%98%AF%E5%BE%AE%E6%9C%8D%E5%8A%A1%EF%BC%8CSpringBoot%E5%92%8CSpringCloud%E7%9A%84%E5%85%B3%E7%B3%BB/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          什么是微服务，SpringBoot和SpringCloud的关系
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/07/21/%E4%BD%BF%E7%94%A8Hexo+github%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%B1%9E%E4%BA%8E%E8%87%AA%E5%B7%B1%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">使用Hexo+github搭建一个属于自己的服务器</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -338,180 +348,14 @@
 
 
 
-
   
-    <article id="post-使用Hexo+github搭建一个属于自己的服务器" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/07/21/%E4%BD%BF%E7%94%A8Hexo+github%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%B1%9E%E4%BA%8E%E8%87%AA%E5%B7%B1%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8/">使用Hexo+github搭建一个属于自己的服务器</a>
-    </h1>
   
 
-        
-        <a href="/2020/07/21/%E4%BD%BF%E7%94%A8Hexo+github%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%B1%9E%E4%BA%8E%E8%87%AA%E5%B7%B1%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="archive-article-date">
-  	<time datetime="2020-07-21T05:09:27.341Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>#安装Nodejs</p>
-<p>node -v #查看node版本</p>
-<p>npm -v #查看npm版本</p>
-<p>npm install -g cnpm –registry=<a href="http://registry.npm.taobao.org" target="_blank" rel="noopener">http://registry.npm.taobao.org</a> #安装淘宝的cnpm 管理器</p>
-<p>cnpm -v #查看cnpm版本</p>
-<p>cnpm install -g hexo-cli #安装hexo框架</p>
-<p>hexo -v #查看hexo版本</p>
-<p>mkdir blog #创建blog目录</p>
-<p>cd blog #进入blog目录</p>
-<p>sudo hexo init #生成博客 初始化博客</p>
-<p>hexo s #启动本地博客服务</p>
-<p><a href="http://localhost:4000/" target="_blank" rel="noopener">http://localhost:4000/</a> #本地访问地址</p>
-<p>hexo n “我的第一篇文章” #创建新的文章</p>
-<p>返回blog目录</p>
-<p>hexo clean #清理</p>
-<p>hexo g #生成</p>
-<p>Github创建一个新的仓库 YourGithubName.github.io</p>
-<p>cnpm install –save hexo-deployer-git #在blog目录下安装git部署插件</p>
-<p>-—</p>
-<p>#配置_config.yml</p>
-<p>-—-<br>Deployment</p>
-<p>Docs: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">https://hexo.io/docs/deployment.html</a></p>
-<p>deploy:</p>
-<p>type: git</p>
-<p>repo: <a href="https://github.com/YourGithubName/YourGithubName.github.io.git" target="_blank" rel="noopener">https://github.com/YourGithubName/YourGithubName.github.io.git</a></p>
-<p>branch: master</p>
-<p>-—-</p>
-<p>hexo d #部署到Github仓库里</p>
-<p><a href="https://YourGithubName.github.io/" target="_blank" rel="noopener">https://YourGithubName.github.io/</a> #访问这个地址可以查看博客</p>
-<p>git clone <a href="https://github.com/litten/hexo-theme-yilia.git" target="_blank" rel="noopener">https://github.com/litten/hexo-theme-yilia.git</a> themes/yilia #下载yilia主题到本地</p>
-<p>#修改hexo根目录下的 _config.yml 文件 ： theme: yilia</p>
-<p>hexo c #清理一下</p>
-<p>hexo g #生成</p>
-<p>hexo d #部署到远程Github仓库</p>
-<p>视频链接：<a href="https://www.bilibili.com/video/BV1Yb411a7ty?t=1486" target="_blank" rel="noopener">https://www.bilibili.com/video/BV1Yb411a7ty?t=1486</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/07/21/%E4%BD%BF%E7%94%A8Hexo+github%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%B1%9E%E4%BA%8E%E8%87%AA%E5%B7%B1%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/07/20/hello-world/">Hello World</a>
-    </h1>
   
 
-        
-        <a href="/2020/07/20/hello-world/" class="archive-article-date">
-  	<time datetime="2020-07-20T10:54:13.460Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/07/20/hello-world/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
+
   
 
 
@@ -534,8 +378,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
