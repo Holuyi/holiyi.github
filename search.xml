@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>测试评论</title>
+      <link href="/2020/07/22/%E6%B5%8B%E8%AF%95%E8%AF%84%E8%AE%BA/"/>
+      <url>/2020/07/22/%E6%B5%8B%E8%AF%95%E8%AF%84%E8%AE%BA/</url>
+      
+        <content type="html"><![CDATA[<h5 id="测试评论"><a href="#测试评论" class="headerlink" title="测试评论"></a>测试评论</h5><p>在下面评论</p><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>多线程与并发2</title>
       <link href="/2020/07/22/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8E%E5%B9%B6%E5%8F%912/"/>
       <url>/2020/07/22/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8E%E5%B9%B6%E5%8F%912/</url>
