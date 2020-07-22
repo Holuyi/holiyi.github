@@ -14,7 +14,7 @@
       
         <tags>
             
-            <tag> springboot,springcloud </tag>
+            <tag> -springboot -springcloud </tag>
             
         </tags>
       
@@ -33,7 +33,7 @@
       
         <tags>
             
-            <tag> maven </tag>
+            <tag> -maven </tag>
             
         </tags>
       
@@ -52,7 +52,7 @@
       
         <tags>
             
-            <tag> sring,springmvc,mybatis </tag>
+            <tag> -sring -springmvc -mybatis </tag>
             
         </tags>
       
@@ -71,7 +71,7 @@
       
         <tags>
             
-            <tag> redis </tag>
+            <tag> -redis </tag>
             
         </tags>
       
@@ -109,7 +109,7 @@
       
         <tags>
             
-            <tag> hexo,github </tag>
+            <tag> -hexo -github </tag>
             
         </tags>
       
