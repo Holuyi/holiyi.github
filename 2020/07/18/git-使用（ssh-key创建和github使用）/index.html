@@ -343,7 +343,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h4 id="ssh用于验证，https-github-com-需要，https-www-cloudcontrol-com-onboarding-ssh也需要。"><a href="#ssh用于验证，https-github-com-需要，https-www-cloudcontrol-com-onboarding-ssh也需要。" class="headerlink" title="ssh用于验证，https://github.com/ 需要，https://www.cloudcontrol.com/onboarding/ssh也需要。"></a>ssh用于验证，<a href="https://github.com/settings/ssh" target="_blank" rel="noopener">https://github.com/</a> 需要，<a href="https://www.cloudcontrol.com/onboarding/ssh也需要。" target="_blank" rel="noopener">https://www.cloudcontrol.com/onboarding/ssh也需要。</a></h4><h4 id="git使用记录"><a href="#git使用记录" class="headerlink" title="git使用记录"></a>git使用记录</h4><p>git是分布式的代码管理工具，远程的代码管理是基于ssh的，所以要使用远程的git则需要ssh的配置。</p>
+                <h4 id="ssh用于验证，https-github-com-需要，https-www-cloudcontrol-com-onboarding-ssh也需要。"><a href="#ssh用于验证，https-github-com-需要，https-www-cloudcontrol-com-onboarding-ssh也需要。" class="headerlink" title="ssh用于验证，https://github.com/ 需要，https://www.cloudcontrol.com/onboarding/ssh也需要。"></a>ssh用于验证，<a href="https://github.com/settings/ssh">https://github.com/</a> 需要，<a href="https://www.cloudcontrol.com/onboarding/ssh也需要。" target="_blank" rel="noopener">https://www.cloudcontrol.com/onboarding/ssh也需要。</a></h4><h4 id="git使用记录"><a href="#git使用记录" class="headerlink" title="git使用记录"></a>git使用记录</h4><p>git是分布式的代码管理工具，远程的代码管理是基于ssh的，所以要使用远程的git则需要ssh的配置。</p>
 <p>github的ssh配置如下：</p>
 <h5 id="一-、设置git的user-name和email："><a href="#一-、设置git的user-name和email：" class="headerlink" title="一 、设置git的user name和email："></a>一 、设置git的user name和email：</h5><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name "xuhaiyan"</span><br><span class="line">$ git config --global user.email "haiyan.xu.vip@gmail.com"</span><br></pre></td></tr></tbody></table></figure>
 
@@ -356,7 +356,7 @@
 <p>最后得到了两个文件：id_rsa和id_rsa.pub</p>
 <p>3.添加密钥到ssh：ssh-add 文件名</p>
 <p>需要之前输入密码。<br>4.在github上添加ssh密钥，这要添加的是“id_rsa.pub”里面的公钥。</p>
-<p>打开<a href="https://github.com/settings/ssh" target="_blank" rel="noopener">https://github.com/</a> ，登陆xuhaiyan825，然后添加ssh。</p>
+<p>打开<a href="https://github.com/settings/ssh">https://github.com/</a> ，登陆xuhaiyan825，然后添加ssh。</p>
 <p>5.测试：ssh <a href="mailto:git@github.com">git@github.com</a></p>
 <blockquote>
 <p>The authenticity of host ‘github.com (207.97.227.239)’ can’t be established.<br>RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.<br>Are you sure you want to continue connecting (yes/no)? yes<br>Warning: Permanently added ‘github.com,207.97.227.239′ (RSA) to the list of known hosts.<br>ERROR: Hi tekkub! You’ve successfully authenticated, but GitHub does not provide shell access<br>Connection to github.com closed.</p>
