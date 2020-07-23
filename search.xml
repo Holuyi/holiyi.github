@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>[转载]LeanCloud配置教程</title>
+      <link href="/2020/07/22/%E8%BD%AC%E8%BD%BD-LeanCloud%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B/"/>
+      <url>/2020/07/22/%E8%BD%AC%E8%BD%BD-LeanCloud%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B/</url>
+      
+        <content type="html"><![CDATA[<p><a href="https://blog.lete114.top/article/Valine-LeanCloud-Config.html" target="_blank" rel="noopener">LeanCloud配置教程</a></p><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> -leancloud -hexo </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>测试评论</title>
       <link href="/2020/07/22/%E6%B5%8B%E8%AF%95%E8%AF%84%E8%AE%BA/"/>
       <url>/2020/07/22/%E6%B5%8B%E8%AF%95%E8%AF%84%E8%AE%BA/</url>
