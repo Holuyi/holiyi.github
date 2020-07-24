@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="[转载]LeanCloud配置教程, Holuyi&#39;s Blog">
+    <meta name="keywords" content="Java多线程（三）, Holuyi&#39;s Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>[转载]LeanCloud配置教程 | Holuyi&#39;s Blog</title>
+    <title>Java多线程（三） | Holuyi&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -179,12 +179,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">[转载]LeanCloud配置教程</h1>
+                    <h1 class="description center-align post-title">Java多线程（三）</h1>
                 </div>
             </div>
         </div>
@@ -301,8 +301,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/leancloud-hexo/">
-                                <span class="chip bg-color">-leancloud -hexo</span>
+                            <a href="/tags/%E7%BA%BF%E7%A8%8B/">
+                                <span class="chip bg-color">线程</span>
                             </a>
                         
                     </div>
@@ -317,14 +317,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-07-22
+                    2020-07-24
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-07-23
+                    2020-07-24
                 </div>
                 
 
@@ -343,7 +343,22 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><a href="https://blog.lete114.top/article/Valine-LeanCloud-Config.html" target="_blank" rel="noopener">LeanCloud配置教程</a></p>
+                <h2 id="Java多线程-三-：Synchronized与Lock的使用"><a href="#Java多线程-三-：Synchronized与Lock的使用" class="headerlink" title="Java多线程(三)：Synchronized与Lock的使用"></a>Java多线程(三)：Synchronized与Lock的使用</h2><p>本文主要内容：Lock锁解决卖票问题、Lock版的生产者与消费者和Synchronized与Lock区别</p>
+<h3 id="Lock锁解决卖票问题"><a href="#Lock锁解决卖票问题" class="headerlink" title="Lock锁解决卖票问题"></a>Lock锁解决卖票问题</h3><p>1.Synchronized版</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SaleTicket_Synchronized</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">        Ticket_Synchronized ticket_synchronized = <span class="keyword">new</span> Ticket_Synchronized();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; { <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= <span class="number">100</span>; i++) ticket_synchronized.sale(); }, <span class="string">"A"</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; { <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= <span class="number">100</span>; i++) ticket_synchronized.sale(); }, <span class="string">"B"</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; { <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= <span class="number">100</span>; i++) ticket_synchronized.sale(); }, <span class="string">"C"</span>).start();</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 资源类，通过多线程操作同一个资源类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Ticket_Synchronized</span></span>{</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> ticket = <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">sale</span><span class="params">()</span></span>{</span><br><span class="line">        <span class="keyword">if</span> (ticket &gt; <span class="number">0</span>){</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">"卖出出了第"</span> + ticket-- + <span class="string">"张票，剩余"</span> + ticket + <span class="string">"张"</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>2.Lock版</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SaleTicket_Lock</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">        Ticket_Lock ticket_lock = <span class="keyword">new</span> Ticket_Lock();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; { <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= <span class="number">100</span>; i++) ticket_lock.sale(); }, <span class="string">"A"</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; { <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= <span class="number">100</span>; i++) ticket_lock.sale(); }, <span class="string">"B"</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; { <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= <span class="number">100</span>; i++) ticket_lock.sale(); }, <span class="string">"C"</span>).start();</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 资源类，通过多线程操作同一个资源类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Ticket_Lock</span></span>{</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> ticket = <span class="number">100</span>;</span><br><span class="line">    Lock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sale</span><span class="params">()</span></span>{</span><br><span class="line">        <span class="comment">// 加锁</span></span><br><span class="line">        lock.lock();</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            <span class="keyword">if</span> (ticket &gt; <span class="number">0</span>){</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"卖出出了第"</span> + ticket-- + <span class="string">"张票，剩余"</span> + ticket + <span class="string">"张"</span>);</span><br><span class="line">            }</span><br><span class="line">        } <span class="keyword">catch</span> (Exception e) {</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        } <span class="keyword">finally</span> {</span><br><span class="line">            <span class="comment">// 解锁</span></span><br><span class="line">            lock.unlock();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="Lock版的生产者与消费者-线程间的通信问题"><a href="#Lock版的生产者与消费者-线程间的通信问题" class="headerlink" title="Lock版的生产者与消费者(线程间的通信问题)"></a>Lock版的生产者与消费者(线程间的通信问题)</h3><p>1.此案例为：交替打印10次数字+1与数字-1</p>
+<p>2.Synchronized版</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProducerAndConsumer_Synchronized</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">        Data_Synchronized data_synchronized = <span class="keyword">new</span> Data_Synchronized();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; {</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {</span><br><span class="line">                <span class="keyword">try</span> {</span><br><span class="line">                    data_synchronized.increment();</span><br><span class="line">                } <span class="keyword">catch</span> (InterruptedException e) {</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }, <span class="string">"A"</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; {</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {</span><br><span class="line">                <span class="keyword">try</span> {</span><br><span class="line">                    data_synchronized.decrement();</span><br><span class="line">                } <span class="keyword">catch</span> (InterruptedException e) {</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }, <span class="string">"B"</span>).start();</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Data_Synchronized</span></span>{</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> data = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// data + 1 方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">increment</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>{</span><br><span class="line">        <span class="keyword">while</span> (data != <span class="number">0</span>) {</span><br><span class="line">            <span class="comment">//等待</span></span><br><span class="line">            <span class="keyword">this</span>.wait();</span><br><span class="line">        }</span><br><span class="line">        <span class="comment">//执行</span></span><br><span class="line">        data += <span class="number">1</span>;</span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"--&gt;"</span> + data);</span><br><span class="line">        <span class="comment">//通知其它线程我已经完成+1</span></span><br><span class="line">        <span class="keyword">this</span>.notifyAll();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// data - 1 方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">decrement</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>{</span><br><span class="line">        <span class="keyword">while</span> (data == <span class="number">0</span>) {</span><br><span class="line">            <span class="comment">//等待</span></span><br><span class="line">            <span class="keyword">this</span>.wait();</span><br><span class="line">        }</span><br><span class="line">        <span class="comment">//执行</span></span><br><span class="line">        data -= <span class="number">1</span>;</span><br><span class="line">        System.out.println(Thread.currentThread().getName() + <span class="string">"--&gt;"</span> + data);</span><br><span class="line">        <span class="comment">//通知其它线程我已经完成-1</span></span><br><span class="line">        <span class="keyword">this</span>.notifyAll();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>3.Lock版</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProducerAndConsumer_Lock</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">        Data_Lock data_lock = <span class="keyword">new</span> Data_Lock();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; {</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {</span><br><span class="line">                data_lock.increment();</span><br><span class="line">            }</span><br><span class="line">        }, <span class="string">"A"</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; {</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {</span><br><span class="line">                data_lock.decrement();</span><br><span class="line">            }</span><br><span class="line">        }, <span class="string">"B"</span>).start();</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Data_Lock</span></span>{</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> data = <span class="number">0</span>;</span><br><span class="line">    Lock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line">    Condition condition = lock.newCondition();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// data + 1 方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">increment</span><span class="params">()</span></span>{</span><br><span class="line">        lock.lock();</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            <span class="keyword">while</span> (data != <span class="number">0</span>) {</span><br><span class="line">                <span class="comment">//等待</span></span><br><span class="line">                condition.await();</span><br><span class="line">            }</span><br><span class="line">            <span class="comment">//执行</span></span><br><span class="line">            data += <span class="number">1</span>;</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">"--&gt;"</span> + data);</span><br><span class="line">            <span class="comment">//通知其它线程我已经完成+1</span></span><br><span class="line">            condition.signalAll();</span><br><span class="line">        } <span class="keyword">catch</span> (Exception e) {</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        } <span class="keyword">finally</span> {</span><br><span class="line">            lock.unlock();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// data - 1 方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">decrement</span><span class="params">()</span></span>{</span><br><span class="line">        lock.lock();</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            <span class="keyword">while</span> (data == <span class="number">0</span>) {</span><br><span class="line">                <span class="comment">//等待</span></span><br><span class="line">                condition.await();</span><br><span class="line">            }</span><br><span class="line">            <span class="comment">//执行</span></span><br><span class="line">            data -= <span class="number">1</span>;</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">"--&gt;"</span> + data);</span><br><span class="line">            <span class="comment">//通知其它线程我已经完成+1</span></span><br><span class="line">            condition.signalAll();</span><br><span class="line">        } <span class="keyword">catch</span> (Exception e) {</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        } <span class="keyword">finally</span> {</span><br><span class="line">            lock.unlock();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="Synchronized与Lock区别"><a href="#Synchronized与Lock区别" class="headerlink" title="Synchronized与Lock区别"></a>Synchronized与Lock区别</h3><p>1、Synchronized是Java关键字，Lock是一个Java类<br>2、Synchronized无法判断锁的状态，Lock可以判断是否获取到了锁<br>3、Synchronized会自动释放锁，Lock必须要手动释放(否则造成死锁问题)<br>4、Synchronized中线程1如果获得锁并阻塞，线程2会一直等待，Lock锁就不一定会等待下去<br>5、Synchronized是可重入锁，不可以中断，非公平，Lock是可重入锁，不可以中断，非公平(但可以使用new ReentrantLock(true)的方式改变公平)<br>6、Synchronized适合少量代码同步问题，Lock锁适合大量的同步代码</p>
+<p>转载链接<a href="https://www.warlock.live/JavaLearn/182.html" target="_blank" rel="noopener">Java多线程（三）</a></p>
 <script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
@@ -375,8 +390,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/leancloud-hexo/">
-                                    <span class="chip bg-color">-leancloud -hexo</span>
+                                <a href="/tags/%E7%BA%BF%E7%A8%8B/">
+                                    <span class="chip bg-color">线程</span>
                                 </a>
                             
                         </div>
@@ -811,20 +826,23 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2020/07/24/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89/">
+                <a href="/2020/07/24/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E9%9B%86%E5%90%88%E7%B1%BB%E4%B8%8D%E5%AE%89%E5%85%A8%E5%92%8C%E5%B8%B8%E7%94%A8%E7%9A%84%E8%BE%85%E5%8A%A9%E7%B1%BB/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="Java多线程（二）">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="Java多线程（四）：集合类不安全和常用的辅助类">
                         
-                        <span class="card-title">Java多线程（二）</span>
+                        <span class="card-title">Java多线程（四）：集合类不安全和常用的辅助类</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Java多线程(二)本文主要内容：线程安全、线程池、线程间通信
-线程安全1234567891011121314151617181920212223242526272829问题引入: 多个窗口同时出售100张票    class MyThre
+                            Java多线程(四)：集合类不安全和常用的辅助类本文主要内容：解决多线程操作集合类不安全问题、常用的辅助类
+一、集合类不安全
+ArrayList
+
+当我们使用多线程操作同一个ArrayList时会产生以下问题：java.util.Concu
                         
                     </div>
                     <div class="publish-info">
@@ -843,7 +861,7 @@
                 <div class="card-action article-tags">
                     
                     <a href="/tags/%E7%BA%BF%E7%A8%8B/">
-                        <span class="chip bg-color">线程</span>
+                        <span class="chip bg-color">-线程</span>
                     </a>
                     
                 </div>
@@ -857,28 +875,25 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/07/22/%E6%B5%8B%E8%AF%95%E8%AF%84%E8%AE%BA/">
+                <a href="/2020/07/24/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="测试评论">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="Java多线程（一）">
                         
-                        <span class="card-title">测试评论</span>
+                        <span class="card-title">Java多线程（一）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            测试评论在下面评论
-
-        document.querySelectorAll('.github-emoji')
-          .forEach(el => {
-            if (!el.dataset.src
+                            Java多线程(一)本文主要内容：创建线程的三种方式、线程的声明周期及状态变化、线程的调度
+创建线程的三种方式12345678910111213141516171819202122232425262728293031323334353637
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-22
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-24
                             </span>
                         <span class="publish-author">
                             
@@ -891,8 +906,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E6%B5%8B%E8%AF%95/">
-                        <span class="chip bg-color">测试</span>
+                    <a href="/tags/%E7%BA%BF%E7%A8%8B/">
+                        <span class="chip bg-color">线程</span>
                     </a>
                     
                 </div>
