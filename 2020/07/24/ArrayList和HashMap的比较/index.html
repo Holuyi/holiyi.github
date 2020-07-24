@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Java多线程（三）, Holuyi&#39;s Blog">
+    <meta name="keywords" content="ArrayList和HashMap的比较, Holuyi&#39;s Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Java多线程（三） | Holuyi&#39;s Blog</title>
+    <title>ArrayList和HashMap的比较 | Holuyi&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -179,12 +179,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/18.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Java多线程（三）</h1>
+                    <h1 class="description center-align post-title">ArrayList和HashMap的比较</h1>
                 </div>
             </div>
         </div>
@@ -301,8 +301,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E7%BA%BF%E7%A8%8B/">
-                                <span class="chip bg-color">线程</span>
+                            <a href="/tags/%E9%9B%86%E5%90%88/">
+                                <span class="chip bg-color">集合</span>
                             </a>
                         
                     </div>
@@ -343,183 +343,87 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="Java多线程-三-：Synchronized与Lock的使用"><a href="#Java多线程-三-：Synchronized与Lock的使用" class="headerlink" title="Java多线程(三)：Synchronized与Lock的使用"></a>Java多线程(三)：Synchronized与Lock的使用</h2><p>本文主要内容：Lock锁解决卖票问题、Lock版的生产者与消费者和Synchronized与Lock区别</p>
-<h3 id="Lock锁解决卖票问题"><a href="#Lock锁解决卖票问题" class="headerlink" title="Lock锁解决卖票问题"></a>Lock锁解决卖票问题</h3><p>1.Synchronized版</p>
-<pre><code class="java">public class SaleTicket_Synchronized {
-    public static void main(String[] args) {
-        Ticket_Synchronized ticket_synchronized = new Ticket_Synchronized();
+                <p>ArrayList和HashMap是Java项目开发中经常用到的容器，下面来比较一下两者之间的区别！</p>
+<p>例子：</p>
+<h6 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList:"></a>ArrayList:</h6><pre><code class="java">ArrayList array = new ArrayList();
+array.add("张三");
+array.add("李四");
+array.add("王五");
+System.out.println("ArrayList的元素个数为："+array.size());
 
-        new Thread(() -&gt; { for (int i = 0; i &lt;= 100; i++) ticket_synchronized.sale(); }, "A").start();
-        new Thread(() -&gt; { for (int i = 0; i &lt;= 100; i++) ticket_synchronized.sale(); }, "B").start();
-        new Thread(() -&gt; { for (int i = 0; i &lt;= 100; i++) ticket_synchronized.sale(); }, "C").start();
-    }
+//遍历方法一：通过迭代器Iterator进行遍历 
+Iterator iter = array.iterator();  
+while(iter.hasNext()){  
+    String name = (String)iter.next();  
+    System.out.println(name); 
+}
+//遍历方法二：使用for循环遍历
+for(int i=0;i&lt;array.size();i++){  
+    System.out.println(array.get(i));  
+}  </code></pre>
+<h6 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap:"></a>HashMap:</h6><p>Ha</p>
+<pre><code class="java">shMap hashMap = new HashMap();
+hashMap.put("name", "张三");
+hashMap.put("name1", "李四");
+hashMap.put("name2", "王五");
+System.out.println("HashMap的元素个数为："+hashMap.size());
+
+//遍历方法一：hashMap.entrySet()方法，通过迭代器Iterator进行遍历 效率高，推荐使用
+Iterator iter1 = hashMap.entrySet().iterator();  
+while(iter1.hasNext()){  
+    Map.Entry name = (Map.Entry)iter1.next();  
+    String nameKey = (String)name.getKey();  
+    String nameValue = (String)name.getValue();  
+    System.out.println(nameKey + "'s name is " + nameValue);
 }
 
-// 资源类，通过多线程操作同一个资源类
-class Ticket_Synchronized{
-    private int ticket = 100;
-
-    public synchronized void sale(){
-        if (ticket &gt; 0){
-            System.out.println(Thread.currentThread().getName() + "卖出出了第" + ticket-- + "张票，剩余" + ticket + "张");
-        }
-    }
-} </code></pre>
-<p>2.Lock版</p>
-<pre><code class="java">public class SaleTicket_Lock {
-    public static void main(String[] args) {
-        Ticket_Lock ticket_lock = new Ticket_Lock();
-
-        new Thread(() -&gt; { for (int i = 0; i &lt;= 100; i++) ticket_lock.sale(); }, "A").start();
-        new Thread(() -&gt; { for (int i = 0; i &lt;= 100; i++) ticket_lock.sale(); }, "B").start();
-        new Thread(() -&gt; { for (int i = 0; i &lt;= 100; i++) ticket_lock.sale(); }, "C").start();
-    }
+//遍历方法二：hashMap.keySet()方法，通过迭代器Iterator进行遍历 效率低，不推荐使用
+Iterator iter2 = hashMap.keySet().iterator();
+while (iter2.hasNext()) {
+    Object key = iter.next();
+    Object val = hashMap.get(key);
 }
 
-// 资源类，通过多线程操作同一个资源类
-class Ticket_Lock{
-    private int ticket = 100;
-    Lock lock = new ReentrantLock();
-
-    public void sale(){
-        // 加锁
-        lock.lock();
-        try {
-            if (ticket &gt; 0){
-                System.out.println(Thread.currentThread().getName() + "卖出出了第" + ticket-- + "张票，剩余" + ticket + "张");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // 解锁
-            lock.unlock();
-        }
-    }
-} </code></pre>
-<h3 id="Lock版的生产者与消费者-线程间的通信问题"><a href="#Lock版的生产者与消费者-线程间的通信问题" class="headerlink" title="Lock版的生产者与消费者(线程间的通信问题)"></a>Lock版的生产者与消费者(线程间的通信问题)</h3><p>1.此案例为：交替打印10次数字+1与数字-1</p>
-<p>2.Synchronized版</p>
-<pre><code class="java">public class ProducerAndConsumer_Synchronized {
-    public static void main(String[] args) {
-        Data_Synchronized data_synchronized = new Data_Synchronized();
-
-        new Thread(() -&gt; {
-            for (int i = 0; i &lt; 10; i++) {
-                try {
-                    data_synchronized.increment();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, "A").start();
-
-        new Thread(() -&gt; {
-            for (int i = 0; i &lt; 10; i++) {
-                try {
-                    data_synchronized.decrement();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, "B").start();
-    }
+//遍历方法三：foreach方法来遍历keyset，和第二种没有什么区别
+Set keySet = hashMap.keySet();
+for(Object key: keySet) {
+    System.out.print("[key=" + key + ",value=" + hashMap.get(key) + "]  ");
 }
 
-class Data_Synchronized{
-    private int data = 0;
-
-    // data + 1 方法
-    public synchronized void increment() throws InterruptedException {
-        while (data != 0) {
-            //等待
-            this.wait();
-        }
-        //执行
-        data += 1;
-        System.out.println(Thread.currentThread().getName() + "--&gt;" + data);
-        //通知其它线程我已经完成+1
-        this.notifyAll();
-    }
-
-    // data - 1 方法
-    public synchronized void decrement() throws InterruptedException {
-        while (data == 0) {
-            //等待
-            this.wait();
-        }
-        //执行
-        data -= 1;
-        System.out.println(Thread.currentThread().getName() + "--&gt;" + data);
-        //通知其它线程我已经完成-1
-        this.notifyAll();
-    }
-} </code></pre>
-<p>3.Lock版</p>
-<pre><code class="java">public class ProducerAndConsumer_Lock {
-    public static void main(String[] args) {
-        Data_Lock data_lock = new Data_Lock();
-
-        new Thread(() -&gt; {
-            for (int i = 0; i &lt; 10; i++) {
-                data_lock.increment();
-            }
-        }, "A").start();
-
-        new Thread(() -&gt; {
-            for (int i = 0; i &lt; 10; i++) {
-                data_lock.decrement();
-            }
-        }, "B").start();
-
-    }
-}
-
-class Data_Lock{
-    private int data = 0;
-    Lock lock = new ReentrantLock();
-    Condition condition = lock.newCondition();
-
-    // data + 1 方法
-    public void increment(){
-        lock.lock();
-        try {
-            while (data != 0) {
-                //等待
-                condition.await();
-            }
-            //执行
-            data += 1;
-            System.out.println(Thread.currentThread().getName() + "--&gt;" + data);
-            //通知其它线程我已经完成+1
-            condition.signalAll();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    // data - 1 方法
-    public void decrement(){
-        lock.lock();
-        try {
-            while (data == 0) {
-                //等待
-                condition.await();
-            }
-            //执行
-            data -= 1;
-            System.out.println(Thread.currentThread().getName() + "--&gt;" + data);
-            //通知其它线程我已经完成+1
-            condition.signalAll();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            lock.unlock();
-        }
-    }
-} </code></pre>
-<h3 id="Synchronized与Lock区别"><a href="#Synchronized与Lock区别" class="headerlink" title="Synchronized与Lock区别"></a>Synchronized与Lock区别</h3><p>1、Synchronized是Java关键字，Lock是一个Java类<br>2、Synchronized无法判断锁的状态，Lock可以判断是否获取到了锁<br>3、Synchronized会自动释放锁，Lock必须要手动释放(否则造成死锁问题)<br>4、Synchronized中线程1如果获得锁并阻塞，线程2会一直等待，Lock锁就不一定会等待下去<br>5、Synchronized是可重入锁，不可以中断，非公平，Lock是可重入锁，不可以中断，非公平(但可以使用new ReentrantLock(true)的方式改变公平)<br>6、Synchronized适合少量代码同步问题，Lock锁适合大量的同步代码</p>
-<p>转载链接<a href="https://www.warlock.live/JavaLearn/182.html" target="_blank" rel="noopener">Java多线程（三）</a></p>
+//遍历方法四：java8中新增方法forEach。
+hashMap.forEach((key,value) -&gt; {
+    System.out.print("[key=" + key + ",value=" + value + "]  ");
+});</code></pre>
+<p>相同点：</p>
+<p>1）都是线程不安全，不同步</p>
+<p>2）都可以储存null值</p>
+<p>3）获取元素个数方法一样，都用size()方法获取</p>
+<p>区别：</p>
+<p>1）实现的接口</p>
+<p>ArrayList实现了List接口（Collection（接口）-&gt;List（接口）-&gt;ArrayList（类）），底层使用的是数组；而HashMap现了Map接口（Map（接口）-&gt;HashMap（类）），底层使用的是Hash算法存储数据。</p>
+<p>2）存储元素</p>
+<p>ArrayList以数组的方式存储数据，里面的元素是有顺序，可以重复的；而HashMap将数据以键值对的方式存储，键的哈希码（hashCode）不可以相同，相同后面的值会将前面的值覆盖，值可以重复，里面的元素无序。</p>
+<p>3）添加元素的方法</p>
+<p>ArrayList用add(Object object)方法添加元素，而HashMap用put(Object key, Object value)添加元素。</p>
+<p>4）默认的大小和扩容</p>
+<p>在 Java 7 中，ArrayList的默认大小是 10 个元素，HashMap 的默认大小是16个元素（必须是2的幂）。</p>
+<p>ArrayList源码</p>
+<pre><code class="java"> /**
+  * Default initial capacity.
+  */
+ private static final int DEFAULT_CAPACITY = 10;</code></pre>
+<p>HashMap源码</p>
+<pre><code class="java"> /**
+  * The default initial capacity - MUST be a power of two.
+  */
+ static final int DEFAULT_INITIAL_CAPACITY = 1 &lt;&lt; 4; // aka 16</code></pre>
+<ul>
+<li>ArrayList扩容增量：原容量的0.5倍+1，如 ArrayList的容量为10，一次扩容后是容量为16；</li>
+<li>HashMap扩容增量：原容量的 1 倍，加载因子为0.75：即当 元素个数 超过 容量长度的0.75倍时，进行扩容，如 HashSet的容量为16，一次扩容后是容量为32</li>
+</ul>
+<h6 id="使用场景："><a href="#使用场景：" class="headerlink" title="使用场景："></a>使用场景：</h6><p>如果需要快速随机访问元素，应该使用ArrayList。需要键值对形式的数据时，应该使用HashMap</p>
+<h6 id="补充内容："><a href="#补充内容：" class="headerlink" title="补充内容："></a>补充内容：</h6><p>加载因子是表示Hash表中元素的填满的程度.若加载因子越大,填满的元素越多,好处是空间利用率高了,但冲突的机会加大了.反之,加载因子越小,填满的元素越少,好处是冲突的机会减小了,但空间浪费多了.冲突的机会越大,则查找的成本越高.反之,查找的成本越小.因而,查找时间就越小.因此,必须在 “冲突的机会”与”空间利用率”之间寻找一种平衡与折衷. 这种平衡与折衷本质上是数据结构中有名的”时-空”矛盾的平衡与折衷.当元素个数超过 容量长度*加载因子的系数 时，会进行扩容。</p>
+<p><a href="https://blog.csdn.net/yaodieteng1510/article/details/79582925" target="_blank" rel="noopener">原文链接</a></p>
 <script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
@@ -551,8 +455,8 @@ class Data_Lock{
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E7%BA%BF%E7%A8%8B/">
-                                    <span class="chip bg-color">线程</span>
+                                <a href="/tags/%E9%9B%86%E5%90%88/">
+                                    <span class="chip bg-color">集合</span>
                                 </a>
                             
                         </div>
@@ -983,32 +887,34 @@ class Data_Lock{
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/07/24/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/">
+                <a href="/2020/07/24/ArrayList%E5%92%8CHashMap%E7%9A%84%E6%AF%94%E8%BE%83/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="Java多线程（一）">
+                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="ArrayList和HashMap的比较">
                         
-                        <span class="card-title">Java多线程（一）</span>
+                        <span class="card-title">ArrayList和HashMap的比较</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Java多线程(一)本文主要内容：创建线程的三种方式、线程的声明周期及状态变化、线程的调度
-创建线程的三种方式1. 继承Thread类:
-    class MyThread extends Thread {
-        @Overri
+                            ArrayList和HashMap是Java项目开发中经常用到的容器，下面来比较一下两者之间的区别！
+例子：
+ArrayList:ArrayList array = new ArrayList();
+array.add("张三");
+arr
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-07-24
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-24
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -1017,11 +923,12 @@ class Data_Lock{
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E7%BA%BF%E7%A8%8B/">
-                        <span class="chip bg-color">线程</span>
+                    <a href="/tags/%E9%9B%86%E5%90%88/">
+                        <span class="chip bg-color">集合</span>
                     </a>
                     
                 </div>
@@ -1035,22 +942,23 @@ class Data_Lock{
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/07/24/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89/">
+                <a href="/2020/07/24/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E5%9B%9B%EF%BC%89%EF%BC%9A%E9%9B%86%E5%90%88%E7%B1%BB%E4%B8%8D%E5%AE%89%E5%85%A8%E5%92%8C%E5%B8%B8%E7%94%A8%E7%9A%84%E8%BE%85%E5%8A%A9%E7%B1%BB/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="Java多线程（二）">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="Java多线程（四）：集合类不安全和常用的辅助类">
                         
-                        <span class="card-title">Java多线程（二）</span>
+                        <span class="card-title">Java多线程（四）：集合类不安全和常用的辅助类</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Java多线程(二)本文主要内容：线程安全、线程池、线程间通信
-线程安全问题引入: 多个窗口同时出售100张票
-    class MyThread implements Runnable {
-        private int tic
+                            Java多线程(四)：集合类不安全和常用的辅助类本文主要内容：解决多线程操作集合类不安全问题、常用的辅助类
+一、集合类不安全
+ArrayList
+
+当我们使用多线程操作同一个ArrayList时会产生以下问题：java.util.Concu
                         
                     </div>
                     <div class="publish-info">
