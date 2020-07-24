@@ -302,7 +302,7 @@
                     <div class="article-tag">
                         
                             <a href="/tags/%E7%BA%BF%E7%A8%8B/">
-                                <span class="chip bg-color">-线程</span>
+                                <span class="chip bg-color">线程</span>
                             </a>
                         
                     </div>
@@ -348,38 +348,134 @@
 <li><p>ArrayList</p>
 <ol>
 <li><p>当我们使用多线程操作同一个ArrayList时会产生以下问题：java.util.ConcurrentModificationException(并发修改异常)</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SafeArrayList</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">        List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">100</span> ; i++) {</span><br><span class="line">            <span class="keyword">new</span> Thread(() -&gt; {</span><br><span class="line">                list.add(UUID.randomUUID().toString().substring(<span class="number">0</span>, <span class="number">5</span>));</span><br><span class="line">                System.out.println(list);</span><br><span class="line">            }, String.valueOf(i)).start();</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="java">public class SafeArrayList {
+    public static void main(String[] args) {
+        List&lt;String&gt; list = new ArrayList&lt;&gt;();
+
+        for (int i = 1; i &lt;= 100 ; i++) {
+            new Thread(() -&gt; {
+                list.add(UUID.randomUUID().toString().substring(0, 5));
+                System.out.println(list);
+            }, String.valueOf(i)).start();
+        }
+
+    }
+}</code></pre>
 </li>
 <li><p>为了解决上述问题，我们使用如下三种方式解决问题</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SafeArrayList</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">        <span class="comment">// 方式一：使用Vector(默认线程安全)替代ArrayList</span></span><br><span class="line">        <span class="comment">//List&lt;String&gt; list = new Vector&lt;&gt;();</span></span><br><span class="line">        <span class="comment">// 方式二：使用Collections集合类产生一个线程安全的ArrayList</span></span><br><span class="line">        <span class="comment">//List&lt;String&gt; list = Collections.synchronizedList(new ArrayList&lt;&gt;());</span></span><br><span class="line">        <span class="comment">// 方式三：使用JUC包下的CopyOnWriteArrayList产生一个线程安全的ArrayList</span></span><br><span class="line">        <span class="comment">// CopyOnWrite：写入时复制是计算机程序设计领域的一种优化策略</span></span><br><span class="line">        <span class="comment">// CopyOnWriteArrayList底层使用Lock锁比Vector底层使用Synchronized效率要高</span></span><br><span class="line">        List&lt;String&gt; list = <span class="keyword">new</span> CopyOnWriteArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">100</span> ; i++) {</span><br><span class="line">            <span class="keyword">new</span> Thread(() -&gt; {</span><br><span class="line">                list.add(UUID.randomUUID().toString().substring(<span class="number">0</span>, <span class="number">5</span>));</span><br><span class="line">                System.out.println(list);</span><br><span class="line">            }, String.valueOf(i)).start();</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="java">public class SafeArrayList {
+    public static void main(String[] args) {
+        // 方式一：使用Vector(默认线程安全)替代ArrayList
+        //List&lt;String&gt; list = new Vector&lt;&gt;();
+        // 方式二：使用Collections集合类产生一个线程安全的ArrayList
+        //List&lt;String&gt; list = Collections.synchronizedList(new ArrayList&lt;&gt;());
+        // 方式三：使用JUC包下的CopyOnWriteArrayList产生一个线程安全的ArrayList
+        // CopyOnWrite：写入时复制是计算机程序设计领域的一种优化策略
+        // CopyOnWriteArrayList底层使用Lock锁比Vector底层使用Synchronized效率要高
+        List&lt;String&gt; list = new CopyOnWriteArrayList&lt;&gt;();
+
+        for (int i = 1; i &lt;= 100 ; i++) {
+            new Thread(() -&gt; {
+                list.add(UUID.randomUUID().toString().substring(0, 5));
+                System.out.println(list);
+            }, String.valueOf(i)).start();
+        }
+
+    }
+} </code></pre>
 </li>
 </ol>
 </li>
 <li><p>Set</p>
 <ol>
 <li><p>当我们使用多线程操作同一个HashSet时会产生以下问题：java.util.ConcurrentModificationException(并发修改异常)</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SafeSet</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">        Set&lt;String&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">100</span> ; i++) {</span><br><span class="line">            <span class="keyword">new</span> Thread(() -&gt; {</span><br><span class="line">                set.add(UUID.randomUUID().toString().substring(<span class="number">0</span>, <span class="number">5</span>));</span><br><span class="line">                System.out.println(set);</span><br><span class="line">            }, String.valueOf(i)).start();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="java">public class SafeSet {
+    public static void main(String[] args) {
+        Set&lt;String&gt; set = new HashSet&lt;&gt;();
+
+        for (int i = 1; i &lt;= 100 ; i++) {
+            new Thread(() -&gt; {
+                set.add(UUID.randomUUID().toString().substring(0, 5));
+                System.out.println(set);
+            }, String.valueOf(i)).start();
+        }
+    }
+} </code></pre>
 </li>
 <li><p>为了解决上述问题，我们使用如下二种方式解决问题</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SafeSet</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">        <span class="comment">// 方式一：使用Collections集合类产生一个线程安全的HashSet</span></span><br><span class="line">        <span class="comment">// Set&lt;String&gt; set = Collections.synchronizedSet(new HashSet&lt;&gt;());</span></span><br><span class="line">        <span class="comment">// 方式二：使用JUC包下的CopyOnWriteArraySet产生一个线程安全的HashSet</span></span><br><span class="line">        Set&lt;String&gt; set = <span class="keyword">new</span> CopyOnWriteArraySet&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">100</span> ; i++) {</span><br><span class="line">            <span class="keyword">new</span> Thread(() -&gt; {</span><br><span class="line">                set.add(UUID.randomUUID().toString().substring(<span class="number">0</span>, <span class="number">5</span>));</span><br><span class="line">                System.out.println(set);</span><br><span class="line">            }, String.valueOf(i)).start();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="java">public class SafeSet {
+    public static void main(String[] args) {
+        // 方式一：使用Collections集合类产生一个线程安全的HashSet
+        // Set&lt;String&gt; set = Collections.synchronizedSet(new HashSet&lt;&gt;());
+        // 方式二：使用JUC包下的CopyOnWriteArraySet产生一个线程安全的HashSet
+        Set&lt;String&gt; set = new CopyOnWriteArraySet&lt;&gt;();
+
+        for (int i = 1; i &lt;= 100 ; i++) {
+            new Thread(() -&gt; {
+                set.add(UUID.randomUUID().toString().substring(0, 5));
+                System.out.println(set);
+            }, String.valueOf(i)).start();
+        }
+    }
+}</code></pre>
 </li>
 </ol>
 </li>
 <li><p>Map</p>
 <ol>
 <li><p>当我们使用多线程操作同一个HashMap时会产生以下问题：java.util.ConcurrentModificationException(并发修改异常)</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SafeMap</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">        Map&lt;String, String&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">100</span> ; i++) {</span><br><span class="line">            <span class="keyword">new</span> Thread(() -&gt; {</span><br><span class="line">                map.put(Thread.currentThread().getName(), UUID.randomUUID().toString().substring(<span class="number">0</span>, <span class="number">5</span>));</span><br><span class="line">            }, String.valueOf(i)).start();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="java">public class SafeMap {
+    public static void main(String[] args) {
+        Map&lt;String, String&gt; map = new HashMap&lt;&gt;();
+
+        for (int i = 1; i &lt;= 100 ; i++) {
+            new Thread(() -&gt; {
+                map.put(Thread.currentThread().getName(), UUID.randomUUID().toString().substring(0, 5));
+            }, String.valueOf(i)).start();
+        }
+    }
+}</code></pre>
 </li>
 <li><p>为了解决上述问题，我们使用如下二种方式解决问题</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SafeMap</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">        <span class="comment">// 方式一：使用Collections集合类产生一个线程安全的HashMap</span></span><br><span class="line">        <span class="comment">// Map&lt;String, String&gt; map = Collections.synchronizedMap(new HashMap&lt;&gt;());</span></span><br><span class="line">        <span class="comment">// 方式二：使用JUC包下的ConcurrentHashMap产生一个线程安全的HashMap</span></span><br><span class="line">        Map&lt;String, String&gt; map = <span class="keyword">new</span> ConcurrentHashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">100</span> ; i++) {</span><br><span class="line">            <span class="keyword">new</span> Thread(() -&gt; {</span><br><span class="line">                map.put(Thread.currentThread().getName(), UUID.randomUUID().toString().substring(<span class="number">0</span>, <span class="number">5</span>));</span><br><span class="line">            }, String.valueOf(i)).start();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="java">public class SafeMap {
+    public static void main(String[] args) {
+        // 方式一：使用Collections集合类产生一个线程安全的HashMap
+        // Map&lt;String, String&gt; map = Collections.synchronizedMap(new HashMap&lt;&gt;());
+        // 方式二：使用JUC包下的ConcurrentHashMap产生一个线程安全的HashMap
+        Map&lt;String, String&gt; map = new ConcurrentHashMap&lt;&gt;();
 
+        for (int i = 1; i &lt;= 100 ; i++) {
+            new Thread(() -&gt; {
+                map.put(Thread.currentThread().getName(), UUID.randomUUID().toString().substring(0, 5));
+            }, String.valueOf(i)).start();
+        }
+    }
+}</code></pre>
 </li>
 </ol>
 </li>
 </ol>
 <h3 id="二、Callable接口方式开启多线程"><a href="#二、Callable接口方式开启多线程" class="headerlink" title="二、Callable接口方式开启多线程"></a>二、Callable接口方式开启多线程</h3><ol>
 <li><p>Callable接口方式开启多线程</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CallableThread</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>{</span><br><span class="line">        <span class="comment">// 通过RunnableFuture接口的实现类FutureTask来传参使用Callable方式产生的多线程</span></span><br><span class="line">        FutureTask&lt;Integer&gt; task = <span class="keyword">new</span> FutureTask&lt;&gt;(<span class="keyword">new</span> MyThread());</span><br><span class="line">        <span class="keyword">new</span> Thread(task).start();</span><br><span class="line">        <span class="comment">// 通过FutureTask来获取Callable接口中方法的返回值</span></span><br><span class="line">        Integer result = task.get();</span><br><span class="line">        System.out.println(result);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">implements</span> <span class="title">Callable</span>&lt;<span class="title">Integer</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>{</span><br><span class="line">        System.out.println(<span class="string">"执行了call()"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">512</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="java">public class CallableThread {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        // 通过RunnableFuture接口的实现类FutureTask来传参使用Callable方式产生的多线程
+        FutureTask&lt;Integer&gt; task = new FutureTask&lt;&gt;(new MyThread());
+        new Thread(task).start();
+        // 通过FutureTask来获取Callable接口中方法的返回值
+        Integer result = task.get();
+        System.out.println(result);
+    }
+}
+
+class MyThread implements Callable&lt;Integer&gt; {
+
+    @Override
+    public Integer call() throws Exception {
+        System.out.println("执行了call()");
+        return 512;
+    }
+}</code></pre>
 </li>
 <li><p>使用Callable接口的一些细节问题：</p>
 <ul>
@@ -390,18 +486,75 @@
 </ol>
 <h3 id="三、常用的辅助类"><a href="#三、常用的辅助类" class="headerlink" title="三、常用的辅助类"></a>三、常用的辅助类</h3><ol>
 <li><p><strong>CountDownLatch</strong>：递减计数器</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CountDownLatchTest</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>{</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 需求：需要6个学生(线程)都离开再执行关门方法</span></span><br><span class="line"></span><br><span class="line">        CountDownLatch countDownLatch = <span class="keyword">new</span> CountDownLatch(<span class="number">6</span>); <span class="comment">// 初始的默认数量</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">6</span> ; i++) {</span><br><span class="line">            <span class="keyword">new</span> Thread(() -&gt; {</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">"号学生离开了"</span>);</span><br><span class="line">                countDownLatch.countDown();</span><br><span class="line">            }, String.valueOf(i)).start();</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        countDownLatch.await(); <span class="comment">//等待计数器归零，然后再向下执行</span></span><br><span class="line">        System.out.println(<span class="string">"关门了.........."</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="java">public class CountDownLatchTest {
+    public static void main(String[] args) throws InterruptedException {
 
+        // 需求：需要6个学生(线程)都离开再执行关门方法
+
+        CountDownLatch countDownLatch = new CountDownLatch(6); // 初始的默认数量
+
+        for (int i = 1; i &lt;= 6 ; i++) {
+            new Thread(() -&gt; {
+                System.out.println(Thread.currentThread().getName() + "号学生离开了");
+                countDownLatch.countDown();
+            }, String.valueOf(i)).start();
+        }
+
+        countDownLatch.await(); //等待计数器归零，然后再向下执行
+        System.out.println("关门了..........");
+    }
+}</code></pre>
 <p><code>countDownLatch.countDown()</code>：数量 - 1<br><code>countDownLatch.await()</code>：等待计数器归零，然后再向下执行</p>
 </li>
 <li><p><strong>CyclicBarrier</strong>：递加计数器</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CyclicBarrierTest</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 需求：集齐7条龙珠(跑完7条线程)召唤神龙(执行最终线程：在CyclicBarrier声明最后线程)</span></span><br><span class="line">        </span><br><span class="line">        CyclicBarrier cyclicBarrier = <span class="keyword">new</span> CyclicBarrier(<span class="number">7</span>, () -&gt; {</span><br><span class="line">            System.out.println(<span class="string">"召唤神龙"</span>);</span><br><span class="line">        });</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">7</span> ; i++) {</span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">int</span> temp = i;</span><br><span class="line">            <span class="keyword">new</span> Thread(() -&gt; {</span><br><span class="line">                System.out.println(<span class="string">"第"</span> + temp +<span class="string">"只龙珠被集齐"</span>);</span><br><span class="line">                <span class="keyword">try</span> {</span><br><span class="line">                    cyclicBarrier.await(); <span class="comment">// await()方法可以让当前计数器数量+1，达到7即结束</span></span><br><span class="line">                } <span class="keyword">catch</span> (InterruptedException | BrokenBarrierException e) {</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                }</span><br><span class="line">            }).start();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="java">public class CyclicBarrierTest {
+    public static void main(String[] args) {
 
+        // 需求：集齐7条龙珠(跑完7条线程)召唤神龙(执行最终线程：在CyclicBarrier声明最后线程)
+
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(7, () -&gt; {
+            System.out.println("召唤神龙");
+        });
+
+        for (int i = 1; i &lt;= 7 ; i++) {
+            final int temp = i;
+            new Thread(() -&gt; {
+                System.out.println("第" + temp +"只龙珠被集齐");
+                try {
+                    cyclicBarrier.await(); // await()方法可以让当前计数器数量+1，达到7即结束
+                } catch (InterruptedException | BrokenBarrierException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+    }
+}</code></pre>
 <p><code>cyclicBarrier.await()</code>：当前计数器数量+1，达到自定义值即结束</p>
 </li>
 <li><p><strong>Semaphore</strong>：信号量，就是一组通行证</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SemaphoreTest</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 需求：有6辆车(6条线程)需要进去停车场(完成方法)，但一次最多进入3辆</span></span><br><span class="line"></span><br><span class="line">        Semaphore semaphore = <span class="keyword">new</span> Semaphore(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">6</span> ; i++) {</span><br><span class="line">            <span class="keyword">new</span> Thread(() -&gt; {</span><br><span class="line">                <span class="keyword">try</span> {</span><br><span class="line">                    semaphore.acquire();    <span class="comment">//获取通行证</span></span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">"进入了停车场"</span>);</span><br><span class="line">                    TimeUnit.SECONDS.sleep(<span class="number">1</span>);</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">"离开了停车场"</span>);</span><br><span class="line">                } <span class="keyword">catch</span> (InterruptedException e) {</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                } <span class="keyword">finally</span> {</span><br><span class="line">                    semaphore.release();    <span class="comment">// 释放通行证</span></span><br><span class="line">                }</span><br><span class="line">            }, String.valueOf(i)).start();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="java">public class SemaphoreTest {
+    public static void main(String[] args) {
 
+        // 需求：有6辆车(6条线程)需要进去停车场(完成方法)，但一次最多进入3辆
+
+        Semaphore semaphore = new Semaphore(3);
+
+        for (int i = 1; i &lt;= 6 ; i++) {
+            new Thread(() -&gt; {
+                try {
+                    semaphore.acquire();    //获取通行证
+                    System.out.println(Thread.currentThread().getName() + "进入了停车场");
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.println(Thread.currentThread().getName() + "离开了停车场");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    semaphore.release();    // 释放通行证
+                }
+            }, String.valueOf(i)).start();
+        }
+    }
+}</code></pre>
 <p><code>semaphore.acquire()</code>：获得，假设如果已经满了，等待，等待被释放为止</p>
 <p><code>semaphore.release()</code>：释放，会将当前的信号量 - 1，然后唤醒等待的线程</p>
 <p>作用：多个共享资源互斥的使用，并发限流，控制最大的线程数</p>
@@ -440,7 +593,7 @@
                         <div class="article-tag">
                             
                                 <a href="/tags/%E7%BA%BF%E7%A8%8B/">
-                                    <span class="chip bg-color">-线程</span>
+                                    <span class="chip bg-color">线程</span>
                                 </a>
                             
                         </div>
@@ -912,7 +1065,7 @@ ArrayList
                 <div class="card-action article-tags">
                     
                     <a href="/tags/%E7%BA%BF%E7%A8%8B/">
-                        <span class="chip bg-color">-线程</span>
+                        <span class="chip bg-color">线程</span>
                     </a>
                     
                 </div>
@@ -926,21 +1079,22 @@ ArrayList
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/07/24/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89Synchronized%E4%B8%8ELock%E7%9A%84%E4%BD%BF%E7%94%A8/">
+                <a href="/2020/07/24/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="Java多线程（三）">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="Java多线程（一）">
                         
-                        <span class="card-title">Java多线程（三）</span>
+                        <span class="card-title">Java多线程（一）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Java多线程(三)：Synchronized与Lock的使用本文主要内容：Lock锁解决卖票问题、Lock版的生产者与消费者和Synchronized与Lock区别
-Lock锁解决卖票问题1.Synchronized版
-123456789
+                            Java多线程(一)本文主要内容：创建线程的三种方式、线程的声明周期及状态变化、线程的调度
+创建线程的三种方式1. 继承Thread类:
+    class MyThread extends Thread {
+        @Overri
                         
                     </div>
                     <div class="publish-info">
